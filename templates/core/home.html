@@ -1,11 +1,123 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-<div class="text-center py-20 bg-white">
-    <h1 class="text-5xl font-bold text-gray-900 mb-4">Tu Sonrisa, <span class="text-blue-600">Nuestra Pasión</span></h1>
-    <p class="text-xl text-gray-500 mb-8">Especialistas en ortodoncia y estética dental.</p>
-    <a href="#" class="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg shadow hover:bg-blue-700 transition">
-        Agendar Cita Ahora
-    </a>
+<div class="relative bg-blue-600 overflow-hidden">
+    <div class="absolute inset-0 opacity-10 pattern-dots"></div>
+    
+    <div class="max-w-7xl mx-auto">
+        <div class="relative z-10 pb-32 sm:pb-32 md:pb-20 lg:w-full lg:pb-28 xl:pb-32 pt-20 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center">
+            
+            <div class="md:w-1/2 text-white text-center md:text-left z-20">
+                <span class="uppercase tracking-wider text-blue-200 font-semibold text-sm mb-2 block">Mejor Tecnología Dental</span>
+                <h1 class="text-4xl tracking-tight font-extrabold sm:text-5xl md:text-6xl mb-6">
+                    Conoce a los mejores <br>
+                    <span class="text-blue-200">Especialistas</span>
+                </h1>
+                <p class="mt-3 text-base text-blue-100 sm:mt-5 sm:text-lg sm:max-w-xl md:mt-5 md:text-xl mb-8">
+                    Recupera tu sonrisa con tratamientos indoloros y resultados garantizados. Tu salud bucal es nuestra prioridad.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-8">
+                    <a href="#citas" class="px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-white hover:bg-gray-50 md:py-4 md:text-lg shadow-md">
+                        Agendar Cita
+                    </a>
+                    <a href="#servicios" class="px-8 py-3 border border-white text-base font-medium rounded-md text-white bg-blue-700 bg-opacity-30 hover:bg-opacity-50 md:py-4 md:text-lg">
+                        Ver Servicios
+                    </a>
+                </div>
+            </div>
+
+            <div class="md:w-1/2 mt-10 md:mt-0 relative z-10 flex justify-end">
+                <img class="h-auto w-full max-w-lg object-cover rounded-bl-[80px]" 
+                     src="https://img.freepik.com/free-photo/pleased-young-female-doctor-wearing-medical-robe-stethoscope-around-neck-standing-with-closed-posture_409827-254.jpg" 
+                     alt="Doctora Jazmin">
+            </div>
+        </div>
+    </div>
+    
+    <div class="absolute bottom-0 left-0 right-0 z-0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="text-white fill-current">
+            <path fill-opacity="1" d="M0,224L80,213.3C160,203,320,181,480,181.3C640,181,800,203,960,224C1120,245,1280,267,1360,277.3L1440,288L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+        </svg>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-30 mb-20">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <div class="bg-white rounded-xl shadow-2xl p-8 transform transition hover:-translate-y-1 duration-300" id="citas">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">📅 Cita Rápida</h3>
+            <form action="#" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" placeholder="Tu Nombre" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition">
+                    <input type="tel" placeholder="Teléfono" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 outline-none transition">
+                </div>
+                <input type="email" placeholder="Correo Electrónico" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 outline-none transition">
+                <select class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 outline-none transition text-gray-500">
+                    <option>Seleccionar Tratamiento...</option>
+                    {% for servicio in servicios %}
+                        <option value="{{ servicio.id }}">{{ servicio.titulo }}</option>
+                    {% endfor %}
+                </select>
+                <button class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition shadow-lg">
+                    Solicitar Turno
+                </button>
+            </form>
+        </div>
+
+        <div class="flex flex-col justify-center p-4">
+            <span class="text-blue-600 font-bold uppercase tracking-wide text-sm">Sobre Nosotros</span>
+            <h2 class="text-3xl font-extrabold text-gray-900 mt-2 mb-4">Expertos en cuidar tu sonrisa</h2>
+            <p class="text-gray-600 text-lg mb-6">
+                Combinamos experiencia y tecnología para brindarte la mejor atención. En nuestra clínica, cada paciente es parte de nuestra familia.
+            </p>
+            <div class="flex items-center space-x-4">
+                <div class="text-4xl">📞</div>
+                <div>
+                    <p class="text-gray-500 text-sm">¿Emergencias? Llámanos 24/7</p>
+                    <p class="text-blue-600 font-bold text-xl">+51 987 654 321</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="bg-gray-50 py-16" id="servicios">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-blue-600 font-semibold tracking-wide uppercase">Nuestros Departamentos</h2>
+            <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                Servicios Especializados
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {% for servicio in servicios %}
+            <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 group">
+                <div class="h-48 overflow-hidden relative">
+                    {% if servicio.imagen %}
+                        <img class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500" src="{{ servicio.imagen.url }}" alt="{{ servicio.titulo }}">
+                    {% else %}
+                        <div class="w-full h-full bg-blue-100 flex items-center justify-center text-blue-500">Sin Foto</div>
+                    {% endif %}
+                    <div class="absolute inset-0 bg-blue-600 opacity-0 group-hover:opacity-20 transition duration-300"></div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ servicio.titulo }}</h3>
+                    <p class="text-gray-600 text-sm mb-4">{{ servicio.descripcion|truncatechars:80 }}</p>
+                    <div class="flex justify-between items-center border-t pt-4">
+                        <span class="text-blue-600 font-bold">S/ {{ servicio.precio_estimado }}</span>
+                        <a href="#" class="text-sm font-semibold text-gray-500 hover:text-blue-600 flex items-center">
+                            Ver más <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <p class="col-span-3 text-center text-gray-500">No hay servicios cargados aún.</p>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}
