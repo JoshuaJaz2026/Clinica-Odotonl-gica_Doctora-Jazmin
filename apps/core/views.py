@@ -2,8 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from .models import Servicio, Cita  # <--- IMPORTANTE: Agregamos Cita aquí
+from .models import Servicio, Cita
 from .forms import RegistroPacienteForm
+
+# --- IMPORTACIONES PARA EL CORREO ---
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.conf import settings
 
 # ---------------------------------------------------------
 # VISTAS PÚBLICAS
@@ -55,7 +61,7 @@ def bot_respuesta(request):
     return JsonResponse({'respuesta': respuesta})
 
 # ---------------------------------------------------------
-# SISTEMA DE USUARIOS Y CITAS (ACTUALIZADO)
+# SISTEMA DE USUARIOS Y CITAS (CON CORREO)
 # ---------------------------------------------------------
 
 def registro(request):
@@ -78,44 +84,79 @@ def dashboard(request):
     """
     Portal privado del paciente. Muestra sus citas reales.
     """
-    # 1. Recuperar las citas de ESTE paciente (usuario logueado)
-    # Las ordenamos por fecha para ver las más próximas primero
     mis_citas = Cita.objects.filter(paciente=request.user).order_by('fecha', 'hora')
-    
-    # 2. Recuperar servicios para el select del Modal de "Nueva Cita"
     servicios = Servicio.objects.all()
     
     context = {
         'nombre_paciente': request.user.first_name,
-        'citas': mis_citas,      # <--- Pasamos las citas reales al HTML
-        'servicios': servicios   # <--- Pasamos los servicios al HTML
+        'citas': mis_citas,
+        'servicios': servicios
     }
     return render(request, 'pacientes/dashboard.html', context)
 
 @login_required
 def crear_cita(request):
     """
-    Procesa el formulario del Modal para guardar una nueva cita.
+    Procesa el formulario, guarda la cita y ENVÍA EL CORREO HTML.
     """
     if request.method == 'POST':
         servicio_id = request.POST.get('servicio')
         fecha = request.POST.get('fecha')
         hora = request.POST.get('hora')
         
-        # Validamos que el servicio exista
+        # Validar servicio
         servicio_obj = get_object_or_404(Servicio, id=servicio_id)
         
-        # Creamos la cita en la base de datos
+        # 1. Guardar la Cita en BD
         Cita.objects.create(
             paciente=request.user,
             servicio=servicio_obj,
             fecha=fecha,
             hora=hora,
-            estado='PENDIENTE' # Por defecto nace como pendiente
+            estado='PENDIENTE'
         )
         
-        # Recargamos el dashboard para que el usuario vea su nueva cita
+        # 2. ENVIAR CORREO AUTOMÁTICO
+        try:
+            asunto = 'Confirmación de Reserva - Clínica Dra. Jazmin'
+            
+            # Datos para rellenar la plantilla HTML
+            contexto_email = {
+                'nombre': request.user.first_name,
+                'tratamiento': servicio_obj.titulo,
+                'fecha': fecha,
+                'hora': hora,
+            }
+            
+            # Renderizamos el HTML
+            html_message = render_to_string('emails/confirmacion_cita.html', contexto_email)
+            plain_message = strip_tags(html_message)
+            
+            send_mail(
+                asunto,
+                plain_message,
+                settings.EMAIL_HOST_USER,
+                [request.user.email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+            print("✅ Correo enviado correctamente a:", request.user.email)
+            
+        except Exception as e:
+            print(f"❌ Error enviando correo: {e}")
+        
         return redirect('dashboard')
         
-    # Si alguien intenta entrar por GET, lo mandamos al dashboard
     return redirect('dashboard')
+
+# --- VISTA TEMPORAL PARA VER EL DISEÑO DEL CORREO (ESTA ES LA QUE FALTABA) ---
+def test_email_design(request):
+    # Datos falsos para probar el diseño visual
+    contexto_falso = {
+        'nombre': 'Joshua (Vista Previa)',
+        'tratamiento': 'Ortodoncia Invisible',
+        'fecha': '2026-02-14',
+        'hora': '15:30',
+    }
+    # Renderizamos el HTML del correo directamente en el navegador
+    return render(request, 'emails/confirmacion_cita.html', contexto_falso)

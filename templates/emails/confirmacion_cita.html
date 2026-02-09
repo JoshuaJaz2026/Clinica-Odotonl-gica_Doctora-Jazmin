@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7fa; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px; margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header { background-color: #2563eb; color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { padding: 20px; color: #333333; line-height: 1.6; }
+        .details { background-color: #f0f9ff; padding: 15px; border-left: 4px solid #2563eb; margin: 20px 0; border-radius: 4px; }
+        .footer { text-align: center; font-size: 12px; color: #888888; margin-top: 20px; border-top: 1px solid #eeeeee; padding-top: 10px; }
+        .btn { display: inline-block; background-color: #2563eb; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✅ Cita Recibida</h1>
+        </div>
+        <div class="content">
+            <p>Hola <strong>{{ nombre }}</strong>,</p>
+            <p>¡Gracias por confiar en nosotros! Hemos recibido tu solicitud de cita correctamente. </p>
+            
+            <p>Aquí están los detalles de tu reserva:</p>
+            
+            <div class="details">
+                <p><strong>🦷 Tratamiento:</strong> {{ tratamiento }}</p>
+                <p><strong>📅 Fecha:</strong> {{ fecha }}</p>
+                <p><strong>⏰ Hora:</strong> {{ hora }}</p>
+                <p><strong>📂 Estado:</strong> <span style="color: #d97706;">Pendiente de Confirmación</span></p>
+            </div>
+
+            <p>Nuestro equipo revisará la disponibilidad y te enviaremos una confirmación final o nos pondremos en contacto contigo si hay algún cambio.</p>
+            
+            <div style="text-align: center;">
+                <a href="http://127.0.0.1:8000/mi-portal/" class="btn">Ver mi Cita en el Portal</a>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Clínica Dental Dra. Jazmin<br>Av. Principal 123, Lima</p>
+            <p>Si no realizaste esta solicitud, ignora este mensaje.</p>
+        </div>
+    </div>
+</body>
+</html>

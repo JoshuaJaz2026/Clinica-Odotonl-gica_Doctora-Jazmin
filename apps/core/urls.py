@@ -1,16 +1,23 @@
 from django.urls import path
-from django.contrib.auth import views as auth_views # Importante para login/logout
+from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    # Tus rutas existentes
+    # --- RUTAS PÚBLICAS ---
     path('', views.home, name='home'),
     path('bot-respuesta/', views.bot_respuesta, name='bot_respuesta'),
     
-    # --- NUEVAS RUTAS DE USUARIOS ---
+    # --- RUTAS DE USUARIOS ---
     path('registro/', views.registro, name='registro'),
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    
+    # --- PORTAL DEL PACIENTE ---
     path('mi-portal/', views.dashboard, name='dashboard'),
+    
+    # --- FUNCIONALIDAD DE CITAS ---
     path('crear-cita/', views.crear_cita, name='crear_cita'),
+
+    # --- RUTA TEMPORAL (Esta es la que faltaba para ver el correo) ---
+    path('ver-email/', views.test_email_design, name='test_email'),
 ]
