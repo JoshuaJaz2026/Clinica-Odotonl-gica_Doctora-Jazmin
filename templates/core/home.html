@@ -1,7 +1,56 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-<div class="relative bg-blue-600 overflow-hidden">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dentist",
+  "name": "Clínica Dental Dra. Jazmin",
+  "image": "https://img.freepik.com/free-photo/pleased-young-female-doctor-wearing-medical-robe-stethoscope-around-neck-standing-with-closed-posture_409827-254.jpg",
+  "telephone": "+51992849784",
+  "email": "citas@drajazmin.com",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Av. Principal 123, Oficina 405",
+    "addressLocality": "Lima",
+    "addressRegion": "Lima",
+    "addressCountry": "PE"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "-12.046374",
+    "longitude": "-77.042793"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Saturday",
+      "opens": "09:00",
+      "closes": "18:00"
+    }
+  ],
+  "priceRange": "$$"
+}
+</script>
+
+<style>
+    html { scroll-behavior: smooth; }
+</style>
+
+<div class="relative bg-blue-600 overflow-hidden" id="inicio">
     <div class="absolute inset-0 opacity-10 pattern-dots"></div>
     <div class="max-w-7xl mx-auto">
         <div class="relative z-10 pb-12 md:pb-32 pt-20 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center">
@@ -57,14 +106,14 @@
                 <div class="text-4xl p-2 bg-white rounded-full shadow-sm">📞</div>
                 <div>
                     <p class="text-gray-500 text-sm font-medium">¿Emergencias? Llámanos 24/7</p>
-                    <p class="text-blue-600 font-bold text-xl">+51 987 654 321</p>
+                    <p class="text-blue-600 font-bold text-xl">+51 992 849 784</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="py-12 bg-white border-y border-gray-100 mb-10">
+<div class="py-12 bg-white border-y border-gray-100 mb-0">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div class="p-6 rounded-xl hover:bg-blue-50 transition duration-300 group cursor-pointer border border-transparent hover:border-blue-100">
@@ -86,7 +135,158 @@
     </div>
 </div>
 
-<div class="bg-gray-50 py-16" id="servicios">
+<div class="py-12 bg-white border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p class="text-center text-sm font-semibold text-gray-500 tracking-wide uppercase mb-8">
+            Trabajamos con los principales seguros
+        </p>
+        <div class="flex flex-wrap justify-center gap-8 md:gap-16 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+            
+            <div class="flex items-center space-x-2 group cursor-pointer">
+                <div class="w-8 h-8 bg-pink-600 rounded-full flex items-center justify-center text-white font-bold">P</div>
+                <span class="text-xl font-bold text-gray-700 group-hover:text-pink-600 transition">Pacífico</span>
+            </div>
+
+            <div class="flex items-center space-x-2 group cursor-pointer">
+                <div class="w-8 h-8 bg-red-600 rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-bold">R</div>
+                <span class="text-xl font-bold text-gray-700 group-hover:text-red-600 transition">RIMAC</span>
+            </div>
+
+            <div class="flex items-center space-x-2 group cursor-pointer">
+                <div class="w-8 h-8 bg-red-700 flex items-center justify-center text-white font-bold rounded">M</div>
+                <span class="text-xl font-bold text-gray-700 group-hover:text-red-700 transition">MAPFRE</span>
+            </div>
+
+            <div class="flex items-center space-x-2 group cursor-pointer">
+                <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold">+</div>
+                <span class="text-xl font-bold text-gray-700 group-hover:text-orange-500 transition">La Positiva</span>
+            </div>
+
+        </div>
+        <p class="text-center text-xs text-gray-400 mt-6">
+            *También emitimos facturas para reembolso con otros seguros.
+        </p>
+    </div>
+</div>
+
+<div class="bg-blue-800 py-12 border-t border-blue-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+            <div class="space-y-2">
+                <span class="text-4xl md:text-5xl font-extrabold block">+15</span>
+                <span class="text-blue-200 text-sm uppercase tracking-wider font-semibold">Años de Experiencia</span>
+            </div>
+            <div class="space-y-2">
+                <span class="text-4xl md:text-5xl font-extrabold block">+5k</span>
+                <span class="text-blue-200 text-sm uppercase tracking-wider font-semibold">Pacientes Felices</span>
+            </div>
+            <div class="space-y-2">
+                <span class="text-4xl md:text-5xl font-extrabold block">100%</span>
+                <span class="text-blue-200 text-sm uppercase tracking-wider font-semibold">Garantía de Satisfacción</span>
+            </div>
+            <div class="space-y-2">
+                <span class="text-4xl md:text-5xl font-extrabold block">24/7</span>
+                <span class="text-blue-200 text-sm uppercase tracking-wider font-semibold">Atención de Emergencia</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white py-16 overflow-hidden border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+            
+            <div class="relative mb-10 lg:mb-0">
+                <div class="absolute -top-4 -left-4 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
+                <div class="absolute -bottom-4 -right-4 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob animation-delay-2000"></div>
+                
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white transform rotate-2 hover:rotate-0 transition duration-500">
+                    <img src="https://img.freepik.com/free-photo/portrait-smiling-medical-worker-girl-doctor-white-coat-holding-clipboard-listening-p_1258-88220.jpg" 
+                           alt="Dra. Jazmin Pérez" 
+                           class="w-full h-full object-cover">
+                </div>
+            </div>
+
+            <div>
+                <span class="text-blue-600 font-bold uppercase tracking-wide text-sm">Directora Clínica</span>
+                <h2 class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">Dra. Jazmin Pérez</h2>
+                <p class="mt-4 text-lg text-gray-500 text-justify">
+                    Con más de <strong>10 años de experiencia</strong> transformando sonrisas, mi misión es combinar la precisión científica con un trato humano y cálido. Entiendo que la visita al dentista puede generar ansiedad, por eso me he especializado en técnicas de <em>odontología indolora</em> y mínimamente invasiva.
+                </p>
+                
+                <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0"><svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></div>
+                        <p class="ml-3 text-base text-gray-700 font-medium">Especialista en Ortodoncia</p>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0"><svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></div>
+                        <p class="ml-3 text-base text-gray-700 font-medium">Miembro del Colegio Odontológico</p>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0"><svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></div>
+                        <p class="ml-3 text-base text-gray-700 font-medium">Certificación Invisalign</p>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0"><svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></div>
+                        <p class="ml-3 text-base text-gray-700 font-medium">+5,000 Sonrisas Atendidas</p>
+                    </div>
+                </div>
+
+                <div class="mt-8 border-l-4 border-blue-600 pl-4">
+                    <p class="font-serif italic text-xl text-blue-900">"Tu sonrisa es mi mejor carta de presentación"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-blue-600 font-semibold tracking-wide uppercase text-sm">Espacios Modernos</h2>
+            <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                Tu comodidad es nuestra prioridad
+            </p>
+            <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                Hemos diseñado un ambiente relajante y esterilizado para que tu visita sea una experiencia placentera desde que entras.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-4 h-96 md:h-[500px]">
+            <div class="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-2xl shadow-lg cursor-pointer">
+                <img src="https://img.freepik.com/free-photo/empty-stomatology-orthodontist-office-room-equipped-with-medical-dental-tools_482257-66922.jpg" 
+                       alt="Consultorio Principal" 
+                       class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                <div class="absolute bottom-4 left-4 text-white font-bold text-lg translate-y-4 group-hover:translate-y-0 transition duration-500">Consultorio Principal</div>
+            </div>
+            <div class="relative group overflow-hidden rounded-2xl shadow-lg cursor-pointer">
+                <img src="https://img.freepik.com/free-photo/luxury-reception-hall-hotel_1150-11025.jpg" 
+                       alt="Sala de Espera" 
+                       class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                <div class="absolute inset-0 bg-blue-900 opacity-0 group-hover:opacity-30 transition duration-500"></div>
+                <div class="absolute bottom-2 left-3 text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition duration-500">Sala de Espera VIP</div>
+            </div>
+            <div class="relative group overflow-hidden rounded-2xl shadow-lg cursor-pointer">
+                <img src="https://img.freepik.com/free-photo/dentist-tools-accessories-used-dentists_1150-17937.jpg" 
+                       alt="Esterilización" 
+                       class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                <div class="absolute inset-0 bg-blue-900 opacity-0 group-hover:opacity-30 transition duration-500"></div>
+                <div class="absolute bottom-2 left-3 text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition duration-500">Tecnología Segura</div>
+            </div>
+            <div class="md:col-span-2 relative group overflow-hidden rounded-2xl shadow-lg cursor-pointer">
+                <img src="https://img.freepik.com/free-photo/modern-dental-clinic-interior_1150-18000.jpg" 
+                       alt="Pasillos" 
+                       class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                <div class="absolute bottom-4 left-4 text-white font-bold translate-y-4 group-hover:translate-y-0 transition duration-500">Área de Recuperación</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white py-16" id="servicios">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-blue-600 font-semibold tracking-wide uppercase">Nuestros Departamentos</h2>
@@ -94,7 +294,7 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             {% for servicio in servicios %}
-            <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 group flex flex-col">
+            <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 group flex flex-col border border-gray-100">
                 <div class="h-48 overflow-hidden relative">
                     {% if servicio.imagen %}
                         <img class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500" src="{{ servicio.imagen.url }}" alt="{{ servicio.titulo }}">
@@ -121,7 +321,7 @@
     </div>
 </div>
 
-<div class="py-16 bg-white">
+<div class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-blue-600 font-semibold tracking-wide uppercase text-sm">Resultados Reales</h2>
@@ -134,7 +334,6 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-            
             <div class="group relative rounded-2xl overflow-hidden shadow-xl cursor-pointer">
                 <div class="grid grid-cols-2 h-64">
                     <div class="relative h-full">
@@ -153,7 +352,6 @@
                     <p class="text-gray-500 text-sm mt-2">Paciente recuperó la estética en solo 3 sesiones.</p>
                 </div>
             </div>
-
             <div class="group relative rounded-2xl overflow-hidden shadow-xl cursor-pointer">
                 <div class="grid grid-cols-2 h-64">
                     <div class="relative h-full">
@@ -172,7 +370,6 @@
                     <p class="text-gray-500 text-sm mt-2">Alineación completa en 12 meses.</p>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -320,6 +517,61 @@
     </div>
 </div>
 
+<div class="bg-white py-16 border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-blue-600 font-semibold tracking-wide uppercase text-sm">Blog de Salud</h2>
+            <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                Consejos para tu Sonrisa
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <article class="flex flex-col bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition duration-300">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://img.freepik.com/free-photo/beautiful-girl-bathroom_23-2147690327.jpg" alt="Cepillado" class="w-full h-full object-cover transform hover:scale-110 transition duration-500">
+                </div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <span class="text-xs font-bold text-blue-500 uppercase mb-2">Higiene</span>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">¿Te sangran las encías al cepillarte?</h3>
+                    <p class="text-gray-500 text-sm mb-4 flex-1">Descubre las 3 causas más comunes del sangrado y cómo detenerlo antes de que sea periodontitis.</p>
+                    <a href="#" class="text-blue-600 font-bold hover:text-blue-800 text-sm flex items-center mt-auto">
+                        Leer más <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                </div>
+            </article>
+
+            <article class="flex flex-col bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition duration-300">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://img.freepik.com/free-photo/orthodontist-showing-model-teeth_23-2149140485.jpg" alt="Implantes" class="w-full h-full object-cover transform hover:scale-110 transition duration-500">
+                </div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <span class="text-xs font-bold text-blue-500 uppercase mb-2">Tecnología</span>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Carillas vs. Blanqueamiento</h3>
+                    <p class="text-gray-500 text-sm mb-4 flex-1">¿Cuál es la mejor opción para ti? Analizamos pros, contras y precios de cada tratamiento estético.</p>
+                    <a href="#" class="text-blue-600 font-bold hover:text-blue-800 text-sm flex items-center mt-auto">
+                        Leer más <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                </div>
+            </article>
+
+            <article class="flex flex-col bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition duration-300">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://img.freepik.com/free-photo/little-girl-dentist-office_23-2148963665.jpg" alt="Niños" class="w-full h-full object-cover transform hover:scale-110 transition duration-500">
+                </div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <span class="text-xs font-bold text-blue-500 uppercase mb-2">Pediatría</span>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">La primera visita de tu hijo</h3>
+                    <p class="text-gray-500 text-sm mb-4 flex-1">Consejos prácticos para que tu pequeño pierda el miedo al dentista y tenga una experiencia divertida.</p>
+                    <a href="#" class="text-blue-600 font-bold hover:text-blue-800 text-sm flex items-center mt-auto">
+                        Leer más <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+
 <div class="bg-gray-50 py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
@@ -391,6 +643,54 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const track = document.getElementById('carruselTrack');
+        let index = 0;
+        const totalSlides = 9; 
+
+        function moverCarrusel() {
+            const esCelular = window.innerWidth < 768;
+            const salto = esCelular ? 1 : 3; 
+            const porcentajeAncho = esCelular ? 100 : 33.333;
+
+            index += salto;
+
+            track.style.transition = "transform 1000ms ease-in-out";
+            track.style.transform = `translateX(-${index * porcentajeAncho}%)`;
+
+            if (index >= totalSlides) {
+                setTimeout(() => {
+                    track.style.transition = "none";
+                    index = 0; 
+                    track.style.transform = `translateX(0)`; 
+                }, 1000); 
+            }
+        }
+
+        setInterval(moverCarrusel, 6000);
+    });
+</script>
+
+<button id="scrollToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'});" class="fixed bottom-6 left-6 z-40 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 shadow-2xl transition-all duration-300 transform translate-y-20 opacity-0 group ring-4 ring-blue-100 flex items-center justify-center w-12 h-12">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+    </svg>
+</button>
+
+<script>
+    // Lógica para mostrar/ocultar el botón "Ir Arriba"
+    const scrollBtn = document.getElementById('scrollToTopBtn');
+    
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollBtn.classList.remove('translate-y-20', 'opacity-0');
+        } else {
+            scrollBtn.classList.add('translate-y-20', 'opacity-0');
+        }
+    });
+</script>
+
 <a href="https://wa.me/51992849784?text=Hola%20Dra.%20Jazmin,%20quisiera%20agendar%20una%20cita." 
    target="_blank"
    class="fixed bottom-24 right-6 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-3 shadow-2xl transition-all duration-300 transform hover:scale-110 flex items-center gap-2 group ring-4 ring-green-100">
@@ -417,7 +717,7 @@
             <div class="flex items-center space-x-3">
                 <div class="relative">
                     <img src="https://img.freepik.com/free-photo/pleased-young-female-doctor-wearing-medical-robe-stethoscope-around-neck-standing-with-closed-posture_409827-254.jpg" 
-                         class="w-10 h-10 rounded-full object-cover border-2 border-white">
+                           class="w-10 h-10 rounded-full object-cover border-2 border-white">
                     <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-blue-600"></div>
                 </div>
                 <div>
@@ -481,12 +781,14 @@
         const chatBtn = document.getElementById('chat-btn');
         
         if (chatWindow.classList.contains('hidden')) {
+            // Abrir
             chatWindow.classList.remove('hidden');
             setTimeout(() => {
                 chatWindow.classList.remove('scale-90', 'opacity-0');
                 chatWindow.classList.add('scale-100', 'opacity-100');
             }, 10);
         } else {
+            // Cerrar
             chatWindow.classList.remove('scale-100', 'opacity-100');
             chatWindow.classList.add('scale-90', 'opacity-0');
             setTimeout(() => {
@@ -498,6 +800,7 @@
     function responder(textoUsuario) {
         const messagesDiv = document.getElementById('chat-messages');
         
+        // 1. Mostrar mensaje del usuario
         const userMsg = `
             <div class="flex items-center justify-end space-x-2 animate-pulse">
                 <div class="bg-blue-600 p-3 rounded-l-xl rounded-br-xl shadow-sm text-sm text-white max-w-[85%]">
@@ -507,9 +810,12 @@
         messagesDiv.insertAdjacentHTML('beforeend', userMsg);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
+        // 2. Preguntar al Cerebro (Django)
         fetch(`/bot-respuesta/?msg=${encodeURIComponent(textoUsuario)}`)
             .then(response => response.json())
             .then(data => {
+                
+                // Simular pequeño retraso humano
                 setTimeout(() => {
                     const botMsg = `
                         <div class="flex items-start space-x-2">
@@ -521,6 +827,7 @@
                     messagesDiv.insertAdjacentHTML('beforeend', botMsg);
                     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
+                    // Acciones automáticas según la respuesta (Scroll)
                     if (data.respuesta.includes("formulario")) {
                          document.getElementById('citas').scrollIntoView({ behavior: 'smooth' });
                     }
@@ -529,6 +836,72 @@
             .catch(error => {
                 console.error('Error:', error);
             });
+    }
+</script>
+
+<div id="welcome-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 relative transform scale-90 transition-transform duration-300" id="welcome-content">
+        
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 focus:outline-none z-10">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <div class="h-32 bg-blue-600 rounded-t-2xl flex items-center justify-center relative overflow-hidden">
+            <div class="absolute inset-0 opacity-20 pattern-dots"></div>
+            <span class="text-6xl animate-bounce">👋</span>
+        </div>
+
+        <div class="p-8 text-center">
+            <h3 class="text-2xl font-extrabold text-gray-900 mb-2">¡Bienvenido a nuestra Clínica!</h3>
+            <p class="text-gray-600 mb-6 leading-relaxed">
+                Nos alegra tenerte aquí. Estamos listos para brindarte la mejor atención dental con tecnología de punta y un trato 100% humano.
+            </p>
+            
+            <div class="space-y-3">
+                <a href="#servicios" onclick="closeModal()" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition transform hover:scale-105">
+                    Ver Tratamientos
+                </a>
+                <button onclick="closeModal()" class="block w-full bg-transparent text-gray-400 text-sm font-medium hover:text-gray-600">
+                    Solo estoy mirando, gracias
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mostrar el modal SIEMPRE después de 3 segundos
+        setTimeout(function() {
+            const modal = document.getElementById('welcome-modal');
+            const content = document.getElementById('welcome-content');
+            
+            if (modal) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('scale-90');
+                    content.classList.add('scale-100');
+                }, 10);
+            }
+        }, 3000); // 3 segundos de espera
+    });
+
+    function closeModal() {
+        const modal = document.getElementById('welcome-modal');
+        const content = document.getElementById('welcome-content');
+        
+        modal.classList.add('opacity-0');
+        content.classList.remove('scale-100');
+        content.classList.add('scale-90');
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+        
+        // Sin localStorage: No guardamos memoria, así sale siempre.
     }
 </script>
 
@@ -548,7 +921,7 @@
                     </div>
                     <div class="flex items-center text-gray-300">
                         <span class="text-blue-500 mr-2">📞</span>
-                        <span>+51 987 654 321</span>
+                        <span>+51 992 849 784</span>
                     </div>
                     <div class="flex items-center text-gray-300">
                         <span class="text-blue-500 mr-2">✉️</span>

@@ -1,0 +1,69 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="min-h-screen bg-blue-50 flex items-center justify-center p-4 px-4 sm:px-6 lg:px-8 py-12">
+    
+    <div class="bg-white w-full max-w-[500px] rounded-3xl shadow-2xl overflow-hidden border border-blue-100 transform transition-all hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.2)]">
+        
+        <div class="relative h-56 bg-blue-600">
+            <img src="https://img.freepik.com/free-photo/smiling-young-female-dentist-holding-dental-tools-looking-camera_171337-1949.jpg" 
+                 alt="Bienvenido a la Clínica" 
+                 class="w-full h-full object-cover opacity-50 mix-blend-overlay">
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-blue-600/40 flex flex-col items-center justify-center text-white p-6 text-center">
+                <h2 class="text-3xl font-extrabold tracking-tight mb-2">¡Bienvenido!</h2>
+                <p class="text-blue-100 text-sm font-medium">
+                    Únete a nuestra familia dental y cuida tu sonrisa.
+                </p>
+            </div>
+        </div>
+
+        <div class="p-8 sm:p-10">
+            
+            <div class="text-center mb-8">
+                <h3 class="text-xl font-bold text-gray-900">Crea tu Cuenta de Paciente</h3>
+                <p class="mt-2 text-sm text-gray-600">
+                    ¿Ya tienes una cuenta? 
+                    <a href="{% url 'login' %}" class="text-blue-600 hover:text-blue-800 font-semibold transition underline decoration-2 underline-offset-2">Inicia sesión aquí</a>
+                </p>
+            </div>
+
+            <form method="post" class="space-y-5">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="space-y-1 group">
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 ml-3 transition-colors group-focus-within:text-blue-600">
+                        {{ field.label }} {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    <div class="relative">
+                        {{ field }}
+                    </div>
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <p class="text-red-500 text-xs mt-1 ml-3 flex items-center font-medium">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 001 1h2a1 1 0 001-1V6a1 1 0 00-1-1h-2z" clip-rule="evenodd" /></svg>
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                     {% if field.help_text %}
+                     <p class="text-gray-400 text-xs mt-0.5 ml-3">{{ field.help_text }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-full shadow-lg text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-300 transform hover:-translate-y-1">
+                        Registrarme Ahora
+                    </button>
+                </div>
+            </form>
+
+            <p class="text-center text-xs text-gray-400 mt-8 leading-relaxed">
+                Al registrarte, aceptas nuestros <a href="#" class="underline hover:text-blue-600">Términos de Servicio</a> y <a href="#" class="underline hover:text-blue-600">Política de Privacidad</a>.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
