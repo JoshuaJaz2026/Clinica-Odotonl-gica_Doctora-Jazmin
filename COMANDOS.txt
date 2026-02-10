@@ -2,3 +2,28 @@
 ENLACE ADMIN:       http://127.0.0.1:8000/admin/
 ENLACE PACIENTE:    http://127.0.0.1:8000/
 -----------------------------------
+
+-----------------------------------
+# Encender el servidor (para ver la web)
+python manage.py runserver
+
+# Crear los archivos de migración (cuando modificas models.py)
+python manage.py makemigrations
+
+# Aplicar los cambios a la base de datos
+python manage.py migrate
+
+# Crear un superusuario (para entrar al admin)
+python manage.py createsuperuser
+-----------------------------------
+
+-----------------------------------
+# Activar entorno (Windows)
+.\venv\Scripts\activate
+
+# Instalar librerías nuevas (si bajaste cambios y te da error de "module not found")
+pip install -r requirements.txt
+
+# Guardar nuevas librerías (si instalaste algo nuevo tú)
+pip freeze > requirements.txt
+-----------------------------------
