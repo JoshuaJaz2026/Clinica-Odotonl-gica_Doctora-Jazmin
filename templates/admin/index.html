@@ -1,0 +1,254 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* =========================================================
+       1. ESTILOS DE LOS GRÁFICOS (Parte Superior)
+       ========================================================= */
+    #custom-dashboard-wrapper {
+        padding: 20px 0;
+        margin-bottom: 40px; 
+    }
+
+    .dashboard-row {
+        display: flex;
+        flex-wrap: wrap; 
+        gap: 25px;       
+        margin-bottom: 30px; 
+    }
+
+    /* Tarjetas de Estadísticas */
+    .stats-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border-left: 5px solid #00C6FF; 
+        flex: 1 1 250px; 
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        transition: transform 0.2s;
+    }
+    .stats-card:hover { transform: translateY(-5px); }
+
+    .stats-title {
+        color: #8898aa;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    .stats-value {
+        color: #32325d;
+        font-size: 2rem;
+        font-weight: 800;
+    }
+
+    /* Contenedores de Gráficos */
+    .chart-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        flex: 1 1 450px; 
+        min-height: 450px; 
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chart-header {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #f0f2f5;
+        display: flex;
+        align-items: center;
+    }
+    
+    .chart-header i { font-size: 1.3rem; margin-right: 12px; color: #00C6FF; }
+    h2.chart-title { color: #1a2533; font-size: 1.2rem; margin: 0; font-weight: 600; }
+    .chart-body { flex-grow: 1; position: relative; }
+
+    /* =========================================================
+       2. ESTILOS PARA LA LISTA DE APPS (TRANSFORMACIÓN TOTAL) 🎨
+       ========================================================= */
+    
+    #content-main {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 25px;
+    }
+
+    .app-box, .module {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        overflow: hidden;
+        border: 1px solid #f0f2f5;
+        margin-bottom: 0 !important;
+    }
+
+    /* --- CORRECCIÓN DE COLOR DEL TÍTULO --- */
+    /* Apuntamos a todo: al contenedor, al texto y al enlace (a) */
+    .module caption, 
+    .module h3, 
+    .app-box .card-header,
+    .module caption a,     /* Importante: El enlace dentro del título */
+    .module h3 a,          /* Importante: El enlace dentro del título */
+    .app-box .card-header a {
+        background: linear-gradient(135deg, #00C6FF 0%, #0072FF 100%) !important; /* Fondo degradado */
+        color: #ffffff !important; /* Texto BLANCO forzado */
+        padding: 15px 20px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0;
+        display: block;
+        width: 100%;
+        text-align: left;
+        text-decoration: none !important; /* Sin subrayado */
+    }
+    
+    /* Aseguramos que al pasar el mouse siga siendo blanco */
+    .module caption a:hover, 
+    .module h3 a:hover {
+        color: #ffffff !important;
+    }
+
+    .module table { width: 100%; border-collapse: collapse; }
+
+    .module tr {
+        border-bottom: 1px solid #f3f6fd;
+        transition: background 0.1s;
+    }
+    .module tr:last-child { border-bottom: none; }
+    .module tr:hover { background-color: #f8fbff; }
+
+    .module th, .model-name {
+        padding: 18px 20px;
+        font-size: 1rem;
+        font-weight: 500;
+        color: #32325d;
+        text-align: left;
+        width: 60%;
+    }
+    .module th a { 
+        color: #32325d; 
+        text-decoration: none; 
+        display: block; 
+    }
+    .module th a:hover { color: #0072FF; }
+
+    .module td {
+        padding: 15px 20px;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    /* BOTONES */
+    .addlink, .changelink {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        text-decoration: none;
+        margin-left: 5px;
+        transition: all 0.2s;
+    }
+
+    .addlink { background-color: #e6f9ff; color: #0072FF; }
+    .addlink:hover { background-color: #00C6FF; color: white; }
+    .addlink::before { content: "+ "; font-weight: bold; }
+
+    .changelink { background-color: #f3f6fd; color: #5e72e4; }
+    .changelink:hover { background-color: #5e72e4; color: white; }
+    .changelink::before { content: "✎ "; }
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<div id="custom-dashboard-wrapper">
+    <div class="dashboard-row">
+        <div class="stats-card">
+            <div class="stats-title">Pacientes Totales</div>
+            <div class="stats-value">1,240</div>
+        </div>
+        <div class="stats-card" style="border-left-color: #0072FF;">
+            <div class="stats-title">Citas este Mes</div>
+            <div class="stats-value">85</div>
+        </div>
+        <div class="stats-card" style="border-left-color: #2dce89;">
+            <div class="stats-title">Ingresos del Día</div>
+            <div class="stats-value">S/ 450.00</div>
+        </div>
+    </div>
+
+    <div class="dashboard-row">
+        <div class="chart-card">
+            <div class="chart-header">
+                <i class="fas fa-chart-line"></i>
+                <h2 class="chart-title">Rendimiento Mensual</h2>
+            </div>
+            <div class="chart-body"><canvas id="citasChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-header">
+                <i class="fas fa-tooth"></i>
+                <h2 class="chart-title">Tratamientos Populares</h2>
+            </div>
+            <div class="chart-body"><canvas id="tratamientosChart"></canvas></div>
+        </div>
+    </div>
+</div>
+
+<h4 style="margin: 30px 0 20px 0; font-weight: 700; color: #32325d; border-left: 4px solid #00C6FF; padding-left: 10px;">
+    GESTIÓN DEL SISTEMA
+</h4>
+
+<div id="content-main">
+    {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var ctx1 = document.getElementById('citasChart').getContext('2d');
+    new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Citas',
+                data: [12, 19, 3, 5, 2, 30],
+                borderColor: '#00C6FF', backgroundColor: 'rgba(0, 198, 255, 0.1)',
+                borderWidth: 3, tension: 0.4, fill: true, pointRadius: 4, pointBackgroundColor: 'white', pointBorderColor: '#00C6FF'
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { borderDash: [5, 5] } }, x: { grid: { display: false } } } }
+    });
+
+    var ctx2 = document.getElementById('tratamientosChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+            labels: ['Limpieza', 'Brackets', 'Endodoncia', 'Extracción'],
+            datasets: [{
+                data: [35, 30, 20, 15],
+                backgroundColor: ['#00C6FF', '#0072FF', '#89f7fe', '#1a2533'],
+                borderWidth: 0
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { usePointStyle: true, padding: 20 } } }, cutout: '70%' }
+    });
+});
+</script>
+{% endblock %}

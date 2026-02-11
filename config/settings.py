@@ -142,7 +142,7 @@ JAZZMIN_SETTINGS = {
     "site_logo_classes": "fas fa-tooth",
     "welcome_sign": "Bienvenida al Panel de Control",
     "copyright": "Clínica Dental Digital",
-    "search_model": ["core.Cita", "auth.User"],
+    "search_model": ["core.Cita", "auth.User", "core.Paciente"],
     
     "topmenu_links": [
         {"name": "Ver Sitio Web", "url": "home", "permissions": ["auth.view_user"]},
@@ -151,18 +151,22 @@ JAZZMIN_SETTINGS = {
     
     "icons": {
         "auth": "fas fa-users-cog",
-        "auth.user": "fas fa-user-injured",
+        
+        # --- CAMBIO REALIZADO AQUÍ ---
+        "auth.user": "fas fa-user",          # Admin = Persona Normal / Traje
         "auth.Group": "fas fa-users",
+
+        # --- TUS APPS ---
         "core.Cita": "fas fa-calendar-check",
         "core.Servicio": "fas fa-tooth",
         "core.Documento": "fas fa-x-ray",
+        "core.Paciente": "fas fa-user-injured", # Paciente = Persona Herida
     },
     
-    "order_with_respect_to": ["core", "core.Cita", "core.Documento", "core.Servicio", "auth"],
+    # Orden del menú lateral
+    "order_with_respect_to": ["core", "core.Cita", "core.Paciente", "core.Servicio", "core.Documento", "auth"],
     
-    # --------------------------------------------------------------
-    # ¡APUNTANDO AL NUEVO ARCHIVO! 
-    # --------------------------------------------------------------
+    # Archivo CSS personalizado
     "custom_css": "css/dashboard_dental.css",
 }
 

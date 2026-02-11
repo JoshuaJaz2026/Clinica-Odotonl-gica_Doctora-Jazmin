@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError # <--- Necesario para el error de correo duplicado
 
 class RegistroPacienteForm(UserCreationForm):
     class Meta:
@@ -13,6 +14,14 @@ class RegistroPacienteForm(UserCreationForm):
             'last_name': 'Apellidos',
             'email': 'Correo Electrónico',
         }
+
+    # --- VALIDACIÓN DE CORREO ÚNICO ---
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        # Verificamos si existe alguien con ese correo en la base de datos
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("Este correo electrónico ya está registrado. Intente iniciar sesión.")
+        return email
 
     def __init__(self, *args, **kwargs):
         super(RegistroPacienteForm, self).__init__(*args, **kwargs)
@@ -31,4 +40,5 @@ class RegistroPacienteForm(UserCreationForm):
         self.fields['username'].widget.attrs['placeholder'] = 'Ej: juanperez99'
         
         # Simplificamos el texto de ayuda de la contraseña
-        self.fields['password1'].help_text = "Usa al menos 8 caracteres, combina letras y números."
+        if 'password1' in self.fields:
+             self.fields['password1'].help_text = "Usa al menos 8 caracteres, combina letras y números."

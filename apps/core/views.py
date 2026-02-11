@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages # <--- Importante para mostrar errores en el HTML
 from .models import Servicio, Cita
 from .forms import RegistroPacienteForm
 
@@ -67,13 +68,27 @@ def bot_respuesta(request):
 def registro(request):
     """
     Permite a un nuevo paciente crear su cuenta.
+    Valida que el correo no exista (gracias a forms.py).
     """
     if request.method == 'POST':
         form = RegistroPacienteForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            # Guardamos el usuario pero sin enviarlo a la BD todavía
+            user = form.save(commit=False)
+            
+            # Aseguramos explícitamente que NO sea Staff (es un paciente)
+            user.is_staff = False
+            user.save()
+            
+            # Iniciamos sesión automáticamente
             login(request, user)
+            
+            # Mensaje de éxito
+            messages.success(request, f"¡Bienvenido/a {user.first_name}! Tu cuenta ha sido creada.")
             return redirect('dashboard')
+        else:
+            # Si hay errores (ej: correo duplicado), los enviamos al template
+            messages.error(request, "Hubo un problema con tu registro. Revisa los errores abajo.")
     else:
         form = RegistroPacienteForm()
     
@@ -113,7 +128,7 @@ def crear_cita(request):
             servicio=servicio_obj,
             fecha=fecha,
             hora=hora,
-            estado='PENDIENTE'
+            estado='pendiente' # Asegúrate que coincida con tu modelo (minúsculas/mayúsculas)
         )
         
         # 2. ENVIAR CORREO AUTOMÁTICO
@@ -141,15 +156,17 @@ def crear_cita(request):
                 fail_silently=False,
             )
             print("✅ Correo enviado correctamente a:", request.user.email)
+            messages.success(request, "¡Cita agendada! Te hemos enviado un correo de confirmación.")
             
         except Exception as e:
             print(f"❌ Error enviando correo: {e}")
+            messages.warning(request, "Cita agendada, pero no pudimos enviar el correo de confirmación.")
         
         return redirect('dashboard')
         
     return redirect('dashboard')
 
-# --- VISTA TEMPORAL PARA VER EL DISEÑO DEL CORREO (ESTA ES LA QUE FALTABA) ---
+# --- VISTA TEMPORAL PARA VER EL DISEÑO DEL CORREO ---
 def test_email_design(request):
     # Datos falsos para probar el diseño visual
     contexto_falso = {
