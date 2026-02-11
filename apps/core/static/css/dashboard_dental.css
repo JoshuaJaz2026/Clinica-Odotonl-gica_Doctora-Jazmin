@@ -1,26 +1,73 @@
 /* --- apps/core/static/css/dashboard_dental.css --- */
 
+:root {
+    --dental-cyan-100: #e6f9ff;
+    --dental-cyan-300: #76dcff;
+    --dental-cyan-400: #39cbff;
+    --dental-cyan-500: #00c6ff;
+    --dental-cyan-700: #007dff;
+    --dental-blue-900: #1a2533;
+    --dental-bg: #f3f6fd;
+}
+
 /* =========================================
-   0. MENÚ Y BUSCADORES
+   0. MENU Y BUSCADORES (SOLO CLICK PARA PERFIL)
    ========================================= */
-.navbar-nav .dropdown:hover > .dropdown-menu {
+
+/* Regla 1: Efecto HOVER para todos los menús EXCEPTO el de usuario (.user-menu) */
+.navbar-nav .dropdown:not(.user-menu):hover > .dropdown-menu {
     display: block !important;
     margin-top: 0;
-    z-index: 99999 !important;
+    z-index: 1060;
     animation: menuFadeIn 0.2s ease forwards;
 }
-@keyframes menuFadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Regla 2: Para el menú de USUARIO, solo mostramos si tiene la clase .show (agregada al hacer click) */
+.main-header .navbar-nav .user-menu.show > .dropdown-menu,
+.main-header .navbar-nav .nav-item.dropdown.user-menu.show > .dropdown-menu,
+.dropdown-menu.show {
+    display: block !important;
+    margin-top: 0;
+    z-index: 1060;
+    animation: menuFadeIn 0.2s ease forwards;
+}
+
+@keyframes menuFadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
 .dropdown-menu {
     border: none !important;
     border-radius: 15px !important;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2) !important;
     padding: 12px 0 !important;
 }
 
+/* ------------------------------------------------------------------- */
+/* ALINEACIÓN IZQUIERDA (CRECE HACIA ADENTRO) */
+/* ------------------------------------------------------------------- */
+/* Esto obliga al menú a pegarse a la derecha del botón y crecer hacia la IZQUIERDA */
+.navbar-nav > .user-menu > .dropdown-menu,
+.navbar-nav > .nav-item.dropdown .dropdown-menu {
+    transform: none !important;      /* Desactivamos el cálculo de JS */
+    top: 100% !important;            /* Lo ponemos justo debajo del botón */
+    right: 0 !important;             /* Pegado al borde DERECHO del botón */
+    left: auto !important;           /* NO pegado a la izquierda */
+    margin-top: 10px !important;     
+    min-width: 260px !important;     /* Ancho suficiente */
+    float: right !important;
+}
+
+/* Asegurar que los items dentro no se rompan */
+.dropdown-item {
+    white-space: nowrap !important; 
+}
+/* ------------------------------------------------------------------- */
+
 .dropdown-item:hover {
-    background: linear-gradient(to right, #f0f7ff, white) !important;
-    color: #0072FF !important;
+    background: linear-gradient(to right, #f0f7ff, #ffffff) !important;
+    color: var(--dental-cyan-700) !important;
 }
 
 .main-header .form-control {
@@ -28,117 +75,189 @@
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     color: #ffffff !important;
     border-radius: 20px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+
+.main-header .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.88) !important;
+    font-weight: 500;
+}
+
+.main-header .input-group .input-group-append .btn,
+.main-header .input-group .input-group-prepend .btn,
+.main-header .input-group .btn {
+    background: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    border-radius: 999px !important;
+    box-shadow: none !important;
+    margin-left: 8px !important;
+    min-width: auto !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 4px !important;
+}
+
+.main-header .input-group .input-group-append .btn:hover,
+.main-header .input-group .input-group-prepend .btn:hover,
+.main-header .input-group .btn:hover {
+    background: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+}
+
+.main-header .input-group .btn i,
+.main-header .input-group .btn .fa,
+.main-header .input-group .btn .fas {
+    color: #ffffff !important;
 }
 
 /* =========================================
    1. ESTILO GENERAL
    ========================================= */
 body {
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
-    background-color: #f3f6fd !important;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--dental-bg) !important;
 }
+
 .main-header.navbar {
-    background: linear-gradient(135deg, #0061ff 0%, #00c6ff 100%) !important;
+    background: linear-gradient(135deg, #0061ff 0%, var(--dental-cyan-500) 100%) !important;
 }
-.main-sidebar { background-color: #1a2533 !important; }
-.brand-link .fa-tooth { color: #00d4ff !important; }
+
+.main-sidebar {
+    background-color: var(--dental-blue-900) !important;
+}
+
+.brand-link .fa-tooth {
+    color: var(--dental-cyan-500) !important;
+}
 
 /* =========================================
-   2. BOTONES DE ACCIÓN (VERSIÓN NUCLEAR CON 'BODY') ☢️
+   2. BOTONES DE ACCION (DJANGO + JAZZMIN)
    ========================================= */
-
-/* Caja contenedora */
-body .submit-row {
+#jazzy-actions > div,
+.submit-row {
     display: flex !important;
-    flex-direction: column !important; /* Pila vertical */
-    align-items: flex-end !important;  /* Alineado a la derecha */
+    flex-direction: column !important;
+    align-items: stretch !important;
     gap: 10px !important;
-    padding: 20px !important;
+    padding: 0 !important;
     background: transparent !important;
     border: none !important;
+}
+
+#jazzy-actions .form-group,
+.submit-row p.deletelink-box {
+    display: block !important;
+    margin: 0 !important;
     width: 100% !important;
 }
 
-/* Ocultar basura */
-body .submit-row p.deletelink-box { display: none !important; }
+.change-form #jazzy-actions .object-tools {
+    margin-top: 10px !important;
+}
 
-/* REGLA MAESTRA: Usamos 'body' para aplastar los estilos de Jazzmin */
-body .submit-row input[type="submit"],      /* Inputs Guardar */
-body .submit-row a.deletelink,              /* Link Eliminar */
-body .submit-row a.historylink,             /* Link Histórico */
-body .submit-row .btn.btn-success,          /* Botón Verde original */
-body .submit-row .btn.btn-danger,           /* Botón Rojo original */
-body .submit-row .btn.btn-primary,          /* Botón Azul original */
-body .submit-row .btn.btn-info,             /* Otros */
-body .submit-row .btn.btn-default,
-body .submit-row .btn {                     /* Cualquier botón genérico */
-    
-    /* 1. Borrar colores viejos */
-    background-color: transparent !important;
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-    
-    /* 2. APLICAR CELESTE */
-    background-image: linear-gradient(135deg, #00C6FF 0%, #0072FF 100%) !important;
-    
-    /* 3. Estilo */
-    color: #ffffff !important;
-    font-size: 14px !important;
-    font-weight: 800 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 2px !important;
-    text-decoration: none !important;
-    
-    /* 4. Forma */
+.change-form #jazzy-actions .btn.form-control,
+.change-form #jazzy-actions input[type="submit"].form-control,
+.change-form #jazzy-actions a.btn.form-control,
+.change-form #jazzy-actions .object-tools a.btn,
+.submit-row input[type="submit"],
+.submit-row a.deletelink,
+.submit-row a.historylink,
+.submit-row .btn,
+.submit-row p.deletelink-box a {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     width: 100% !important;
-    max-width: 450px !important;
-    height: 55px !important;
-    border-radius: 50px !important;
-    margin: 5px 0 !important;
-    padding: 0 !important;
-    
-    /* 5. Visibilidad */
-    opacity: 1 !important;
-    visibility: visible !important;
-    box-shadow: 0 5px 15px rgba(0, 198, 255, 0.3) !important;
+    min-height: 48px !important;
+    margin: 0 !important;
+    padding: 12px 18px !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    background-image: linear-gradient(135deg, var(--dental-cyan-400) 0%, var(--dental-cyan-700) 100%) !important;
+    color: #ffffff !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.4px !important;
+    line-height: 1.2 !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+    box-shadow: 0 8px 18px rgba(0, 161, 255, 0.3) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
-/* ORDEN VISUAL */
-body .submit-row input[name="_save"], body .submit-row .btn-success { order: 1 !important; }
-body .submit-row input[name="_addanother"] { order: 2 !important; }
-body .submit-row input[name="_continue"] { order: 3 !important; }
-body .submit-row a.historylink { order: 4 !important; }
-body .submit-row a.deletelink, body .submit-row .btn-danger { order: 5 !important; margin-top: 15px !important; }
+.change-form #jazzy-actions .btn.form-control:hover,
+.change-form #jazzy-actions input[type="submit"].form-control:hover,
+.change-form #jazzy-actions a.btn.form-control:hover,
+.change-form #jazzy-actions .object-tools a.btn:hover,
+.submit-row input[type="submit"]:hover,
+.submit-row a.deletelink:hover,
+.submit-row a.historylink:hover,
+.submit-row .btn:hover,
+.submit-row p.deletelink-box a:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+    box-shadow: 0 10px 22px rgba(0, 161, 255, 0.4) !important;
+}
 
-/* HOVER */
-body .submit-row input:hover,
-body .submit-row a:hover,
-body .submit-row .btn:hover {
-    filter: brightness(1.2) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 20px rgba(0, 198, 255, 0.5) !important;
+.change-form #jazzy-actions .btn.form-control:focus-visible,
+.change-form #jazzy-actions input[type="submit"].form-control:focus-visible,
+.change-form #jazzy-actions a.btn.form-control:focus-visible,
+.change-form #jazzy-actions .object-tools a.btn:focus-visible,
+.submit-row input[type="submit"]:focus-visible,
+.submit-row a.deletelink:focus-visible,
+.submit-row a.historylink:focus-visible,
+.submit-row .btn:focus-visible,
+.submit-row p.deletelink-box a:focus-visible {
+    outline: 3px solid var(--dental-cyan-100);
+    outline-offset: 2px;
+}
+
+/* Mantener orden visual coherente */
+.submit-row input[name="_save"],
+.submit-row .btn-success,
+.change-form #jazzy-actions input[name="_save"] {
+    order: 1;
+}
+
+.submit-row input[name="_addanother"],
+.change-form #jazzy-actions input[name="_addanother"] {
+    order: 2;
+}
+
+.submit-row input[name="_continue"],
+.change-form #jazzy-actions input[name="_continue"] {
+    order: 3;
+}
+
+.submit-row a.historylink {
+    order: 4;
+}
+
+.submit-row a.deletelink,
+.submit-row .btn-danger,
+.submit-row p.deletelink-box,
+.change-form #jazzy-actions a[href*="/delete/"] {
+    order: 5;
 }
 
 /* =========================================
-   3. PROTECCIÓN DE INPUTS
+   3. INPUTS
    ========================================= */
 .content-wrapper input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]),
-.content-wrapper textarea, 
+.content-wrapper textarea,
 .content-wrapper select {
-    border-radius: 12px !important;
-    border: 2px solid #e2e8f0 !important;
+    width: 100%;
     padding: 15px 20px !important;
-    width: 100% !important;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 12px !important;
 }
 
-.content-wrapper input:focus, 
-.content-wrapper textarea:focus, 
+.content-wrapper input:focus,
+.content-wrapper textarea:focus,
 .content-wrapper select:focus {
-    border-color: #00d4ff !important;
+    border-color: var(--dental-cyan-500) !important;
     box-shadow: 0 0 0 5px rgba(0, 212, 255, 0.15) !important;
 }
