@@ -18,6 +18,9 @@ urlpatterns = [
     # --- FUNCIONALIDAD DE CITAS ---
     path('crear-cita/', views.crear_cita, name='crear_cita'),
 
-    # --- RUTA TEMPORAL (Esta es la que faltaba para ver el correo) ---
+    # --- RUTA TEMPORAL ---
     path('ver-email/', views.test_email_design, name='test_email'),
+
+    # --- NUEVA RUTA: DESCARGAR PDF ---
+    path('receta/pdf/<int:receta_id>/', views.descargar_receta_pdf, name='descargar_receta'),
 ]

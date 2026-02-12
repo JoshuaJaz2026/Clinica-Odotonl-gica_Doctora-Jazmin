@@ -133,7 +133,7 @@ EMAIL_HOST_PASSWORD = 'xxxx xxxx xxxx xxxx'
 
 
 # ---------------------------------------------------------
-# 11. DISEÑO JAZZMIN
+# 11. DISEÑO JAZZMIN (CONFIGURACIÓN VISUAL)
 # ---------------------------------------------------------
 JAZZMIN_SETTINGS = {
     "site_title": "Portal Dra. Jazmin",
@@ -151,22 +151,32 @@ JAZZMIN_SETTINGS = {
     
     "icons": {
         "auth": "fas fa-users-cog",
-        
-        # --- CAMBIO REALIZADO AQUÍ ---
-        "auth.user": "fas fa-user",          # Admin = Persona Normal / Traje
+        "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
 
-        # --- TUS APPS ---
+        # --- ICONOS DE TUS MODELOS ---
         "core.Cita": "fas fa-calendar-check",
         "core.Servicio": "fas fa-tooth",
         "core.Documento": "fas fa-x-ray",
-        "core.Paciente": "fas fa-user-injured", # Paciente = Persona Herida
+        "core.Paciente": "fas fa-user-injured",
+        "core.Pago": "fas fa-cash-register",
+        "core.Insumo": "fas fa-boxes",
+        "core.Receta": "fas fa-prescription-bottle-alt", # <--- NUEVO ICONO RECETA 💊
     },
     
     # Orden del menú lateral
-    "order_with_respect_to": ["core", "core.Cita", "core.Paciente", "core.Servicio", "core.Documento", "auth"],
+    "order_with_respect_to": [
+        "core", 
+        "core.Cita", 
+        "core.Paciente", 
+        "core.Receta",   # <--- NUEVO ORDEN
+        "core.Servicio", 
+        "core.Documento", 
+        "core.Pago", 
+        "core.Insumo",
+        "auth"
+    ],
     
-    # Archivo CSS personalizado
     "custom_css": "css/dashboard_dental.css",
 }
 
