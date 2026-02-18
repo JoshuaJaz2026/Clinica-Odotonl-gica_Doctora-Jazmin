@@ -16,13 +16,23 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 # ---------------------------------------------------------
 # 2. SEGURIDAD
 # ---------------------------------------------------------
-SECRET_KEY = 'django-insecure-*8)=w4bkuv+i^mlw_@_e1)hob%5nvj*l!=d%u68weh%i3!#=1p'
+# Intenta leer la clave desde Render, si no, usa la local por defecto
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-*8)=w4bkuv+i^mlw_@_e1)hob%5nvj*l!=d%u68weh%i3!#=1p')
 
-# IMPORTANTE: Mantenlo en True mientras estés en tu PC.
-# Solo cámbialo a False cuando lo subas a un servidor real.
-DEBUG = True
+# DEBUG será True en tu PC y False automáticamente al subirlo a Render
+DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = [] # En producción pon aquí tu dominio: ['midominio.com']
+# Dominios autorizados para evitar el error DisallowedHost
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'clinica-jazmin-demo.onrender.com', # Dominio de tu servicio en Render
+]
+
+# Configuración necesaria para formularios seguros en versiones modernas de Django
+CSRF_TRUSTED_ORIGINS = [
+    'https://clinica-jazmin-demo.onrender.com'
+]
 
 
 # ---------------------------------------------------------
@@ -118,7 +128,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'apps', 'core', 'static'),
 ]
 
-# Configuración base para Whitenoise (siempre útil)
+# Configuración base para Whitenoise
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
@@ -173,11 +183,10 @@ JAZZMIN_SETTINGS = {
         "core.Receta": "fas fa-prescription-bottle-alt",
         
         # --- NUEVOS ÍCONOS ---
-        "core.FichaMedica": "fas fa-file-medical-alt", # 🩺 Ficha
-        "core.Producto": "fas fa-shopping-cart",       # 🛒 Tienda
+        "core.FichaMedica": "fas fa-file-medical-alt", 
+        "core.Producto": "fas fa-shopping-cart",       
     },
     
-    # Orden del menú lateral
     "order_with_respect_to": [
         "core", 
         "core.Cita", 
@@ -218,6 +227,5 @@ JAZZMIN_UI_TWEAKS = {
 }
 
 # --- CONFIGURACIÓN AVANZADA PARA PRODUCCIÓN ---
-# Esto activa la compresión máxima solo cuando DEBUG es False (en Internet)
 if not DEBUG:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
