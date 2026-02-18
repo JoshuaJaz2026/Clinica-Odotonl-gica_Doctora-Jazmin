@@ -120,7 +120,7 @@ class Paciente(User):
         verbose_name_plural = 'Pacientes'
 
 # ---------------------------------------------------------
-# 6. NUEVO: MODELO INSUMO (Inventario) 📦
+# 6. MODELO INSUMO (Inventario) 📦
 # ---------------------------------------------------------
 class Insumo(models.Model):
     UNIDADES = [
@@ -149,14 +149,12 @@ class Insumo(models.Model):
     class Meta:
         verbose_name = "Insumo / Material"
         verbose_name_plural = "Inventario (Almacén)"
-# ... (Tus modelos anteriores: Servicio, Cita, Pago, Documento, Paciente, Insumo) ...
 
 # ---------------------------------------------------------
 # 7. MODELO RECETA MÉDICA 💊
 # ---------------------------------------------------------
 class Receta(models.Model):
     paciente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recetas', verbose_name="Paciente")
-    # Opcional: Vincular a una cita específica
     cita = models.ForeignKey(Cita, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Cita Relacionada")
     
     diagnostico = models.TextField(verbose_name="Diagnóstico")
@@ -170,3 +168,46 @@ class Receta(models.Model):
     class Meta:
         verbose_name = "Receta Médica"
         verbose_name_plural = "Gestión de Recetas"
+
+# ---------------------------------------------------------
+# 8. MODELO FICHA MÉDICA (ANAMNESIS) 🩺 (NUEVO)
+# ---------------------------------------------------------
+class FichaMedica(models.Model):
+    paciente = models.OneToOneField(User, on_delete=models.CASCADE, related_name='ficha_medica', verbose_name="Paciente")
+    
+    es_alergico = models.BooleanField(default=False, verbose_name="¿Tiene Alergias?")
+    alergias_detalle = models.CharField(max_length=200, blank=True, verbose_name="¿A qué es alérgico?", help_text="Ej: Penicilina, Látex")
+    
+    tiene_enfermedad = models.BooleanField(default=False, verbose_name="¿Enfermedad Crónica?")
+    enfermedad_detalle = models.CharField(max_length=200, blank=True, verbose_name="Nombre de la enfermedad", help_text="Ej: Diabetes, Hipertensión")
+    
+    toma_medicamentos = models.BooleanField(default=False, verbose_name="¿Toma Medicamentos?")
+    medicamentos_detalle = models.CharField(max_length=200, blank=True, verbose_name="¿Cuáles?", help_text="Ej: Aspirina diaria")
+    
+    esta_embarazada = models.BooleanField(default=False, verbose_name="¿Está embarazada?")
+    observaciones = models.TextField(blank=True, verbose_name="Otras observaciones médicas")
+    fecha_actualizacion = models.DateTimeField(auto_now=True, verbose_name="Última actualización")
+
+    def __str__(self):
+        return f"Ficha de {self.paciente.first_name}"
+
+    class Meta:
+        verbose_name = "Ficha Médica"
+        verbose_name_plural = "Fichas Médicas"
+
+# ---------------------------------------------------------
+# 9. MODELO PRODUCTO (TIENDA) 🛒 (NUEVO)
+# ---------------------------------------------------------
+class Producto(models.Model):
+    nombre = models.CharField(max_length=100, verbose_name="Nombre del Producto")
+    descripcion = models.TextField(verbose_name="Descripción")
+    precio = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Precio (S/)")
+    imagen = models.ImageField(upload_to='productos/', verbose_name="Foto del Producto")
+    stock = models.PositiveIntegerField(default=0, verbose_name="Stock Disponible")
+    
+    def __str__(self):
+        return f"{self.nombre} - S/ {self.precio}"
+
+    class Meta:
+        verbose_name = "Producto en Venta"
+        verbose_name_plural = "Tienda (Productos)"

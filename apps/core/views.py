@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponse # <--- Agregué HttpResponse para el PDF
+from django.http import JsonResponse, HttpResponse 
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache # <--- IMPORTANTE: IMPORTAMOS ESTO
 from django.contrib import messages
-from .models import Servicio, Cita, Receta # <--- Importamos Receta
+from .models import Servicio, Cita, Receta, Producto 
 from .forms import RegistroPacienteForm
 
 # --- IMPORTACIONES PARA EL CORREO ---
@@ -69,13 +70,17 @@ def registro(request):
         form = RegistroPacienteForm()
     return render(request, 'registration/registro.html', {'form': form})
 
+# ---------------------------------------------------------
+# PORTAL DEL PACIENTE (PROTEGIDO)
+# ---------------------------------------------------------
+
+@never_cache # <--- ESTO EVITA QUE EL BOTÓN 'ATRÁS' MUESTRE LA PÁGINA TRAS LOGOUT
 @login_required
 def dashboard(request):
     """
     Portal privado del paciente. Muestra citas Y RECETAS.
     """
     mis_citas = Cita.objects.filter(paciente=request.user).order_by('fecha', 'hora')
-    # NUEVO: Traemos las recetas
     mis_recetas = Receta.objects.filter(paciente=request.user).order_by('-fecha_emision')
     
     servicios = Servicio.objects.all()
@@ -83,7 +88,7 @@ def dashboard(request):
     context = {
         'nombre_paciente': request.user.first_name,
         'citas': mis_citas,
-        'recetas': mis_recetas, # <--- Enviamos recetas al HTML
+        'recetas': mis_recetas,
         'servicios': servicios
     }
     return render(request, 'pacientes/dashboard.html', context)
@@ -144,35 +149,31 @@ def test_email_design(request):
 # ---------------------------------------------------------
 # NUEVA VISTA: DESCARGAR RECETA PDF (PACIENTE)
 # ---------------------------------------------------------
+@never_cache # <--- Protegemos también la receta
 @login_required
 def descargar_receta_pdf(request, receta_id):
-    # Buscamos la receta y aseguramos que pertenezca al usuario logueado
     receta = get_object_or_404(Receta, id=receta_id, paciente=request.user)
 
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
 
-    # Encabezado
     p.setFont("Helvetica-Bold", 16)
     p.drawString(50, height - 50, "CLÍNICA DENTAL DRA. JAZMIN")
     p.setFont("Helvetica", 10)
     p.drawString(50, height - 70, "Av. Principal 123 - Lima, Perú | Tel: 999-999-999")
     p.line(50, height - 80, width - 50, height - 80)
 
-    # Datos Paciente
     p.setFont("Helvetica-Bold", 12)
     p.drawString(50, height - 110, f"PACIENTE: {receta.paciente.first_name} {receta.paciente.last_name}")
     p.setFont("Helvetica", 10)
     p.drawString(400, height - 110, f"FECHA: {receta.fecha_emision.strftime('%d/%m/%Y')}")
 
-    # Diagnóstico
     p.setFont("Helvetica-Bold", 11)
     p.drawString(50, height - 150, "DIAGNÓSTICO:")
     p.setFont("Helvetica", 10)
     p.drawString(50, height - 165, receta.diagnostico)
 
-    # Medicamentos
     p.setFont("Helvetica-Bold", 11)
     p.drawString(50, height - 200, "INDICACIONES MÉDICAS (RP):")
     
@@ -183,7 +184,6 @@ def descargar_receta_pdf(request, receta_id):
         text_object.textLine(line)
     p.drawText(text_object)
 
-    # Pie de página
     p.line(50, 150, 250, 150)
     p.setFont("Helvetica", 9)
     p.drawString(80, 135, "Firma Dra. Jazmín")
@@ -194,3 +194,26 @@ def descargar_receta_pdf(request, receta_id):
 
     buffer.seek(0)
     return HttpResponse(buffer, content_type='application/pdf')
+
+# ---------------------------------------------------------
+# TIENDA Y PAGOS 🛒
+# ---------------------------------------------------------
+
+@never_cache # <--- Protegemos la tienda
+@login_required
+def tienda(request):
+    """ Muestra los productos disponibles """
+    productos = Producto.objects.filter(stock__gt=0) # Solo los que tienen stock
+    return render(request, 'pacientes/tienda.html', {'productos': productos})
+
+@login_required
+def pagar_cita(request, cita_id):
+    """ Simulación de Pasarela de Pago para Citas """
+    cita = get_object_or_404(Cita, id=cita_id, paciente=request.user)
+    
+    # Redirigimos a WhatsApp para confirmar el Yape/Plin
+    telefono_clinica = "51999999999" # Pon el número real
+    mensaje = f"Hola, soy {request.user.first_name}. Quiero pagar mi cita de {cita.servicio.titulo} (S/ {cita.servicio.precio_estimado}) programada para el {cita.fecha}."
+    
+    url_whatsapp = f"https://wa.me/{telefono_clinica}?text={mensaje}"
+    return redirect(url_whatsapp)

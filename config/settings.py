@@ -17,8 +17,12 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 # 2. SEGURIDAD
 # ---------------------------------------------------------
 SECRET_KEY = 'django-insecure-*8)=w4bkuv+i^mlw_@_e1)hob%5nvj*l!=d%u68weh%i3!#=1p'
+
+# IMPORTANTE: Mantenlo en True mientras estés en tu PC.
+# Solo cámbialo a False cuando lo subas a un servidor real.
 DEBUG = True
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = [] # En producción pon aquí tu dominio: ['midominio.com']
 
 
 # ---------------------------------------------------------
@@ -41,6 +45,7 @@ INSTALLED_APPS = [
 # ---------------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # <--- Whitenoise para archivos estáticos
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -113,6 +118,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'apps', 'core', 'static'),
 ]
 
+# Configuración base para Whitenoise (siempre útil)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -121,8 +129,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ---------------------------------------------------------
 # 10. REDIRECCIONES Y CORREO
 # ---------------------------------------------------------
+LOGIN_URL = 'login' 
 LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = '/admin/login/'
+LOGOUT_REDIRECT_URL = 'login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -161,7 +170,11 @@ JAZZMIN_SETTINGS = {
         "core.Paciente": "fas fa-user-injured",
         "core.Pago": "fas fa-cash-register",
         "core.Insumo": "fas fa-boxes",
-        "core.Receta": "fas fa-prescription-bottle-alt", # <--- NUEVO ICONO RECETA 💊
+        "core.Receta": "fas fa-prescription-bottle-alt",
+        
+        # --- NUEVOS ÍCONOS ---
+        "core.FichaMedica": "fas fa-file-medical-alt", # 🩺 Ficha
+        "core.Producto": "fas fa-shopping-cart",       # 🛒 Tienda
     },
     
     # Orden del menú lateral
@@ -169,8 +182,9 @@ JAZZMIN_SETTINGS = {
         "core", 
         "core.Cita", 
         "core.Paciente", 
-        "core.Receta",   # <--- NUEVO ORDEN
+        "core.Receta",   
         "core.Servicio", 
+        "core.Producto", 
         "core.Documento", 
         "core.Pago", 
         "core.Insumo",
@@ -202,3 +216,8 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success"
     }
 }
+
+# --- CONFIGURACIÓN AVANZADA PARA PRODUCCIÓN ---
+# Esto activa la compresión máxima solo cuando DEBUG es False (en Internet)
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

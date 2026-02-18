@@ -6,18 +6,26 @@
     <div class="bg-blue-800 pb-32">
         <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
-                <h1 class="text-3xl font-bold text-white">
-                    Hola, {{ user.first_name }} 👋
-                </h1>
-                <div class="flex space-x-3">
-                    <a href="#" class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Editar Perfil</a>
+                <div>
+                    <h1 class="text-3xl font-bold text-white">
+                        Hola, {{ user.first_name }} 👋
+                    </h1>
+                    <p class="text-blue-200 mt-2">Bienvenido a tu portal de salud dental.</p>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <a href="{% url 'tienda' %}" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-xl shadow-lg font-bold flex items-center transition transform hover:scale-105">
+                        <span class="mr-2">🛒</span> Tienda
+                    </a>
+
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
-                        <button type="submit" class="bg-white text-blue-800 hover:bg-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition">Cerrar Sesión</button>
+                        <button type="submit" class="bg-white/10 text-white hover:bg-white/20 px-4 py-2.5 rounded-lg text-sm font-medium transition backdrop-blur-sm">
+                            Cerrar Sesión
+                        </button>
                     </form>
                 </div>
             </div>
-            <p class="text-blue-200 mt-2">Bienvenido a tu portal de salud dental.</p>
         </div>
     </div>
 
@@ -38,30 +46,37 @@
                         <div class="space-y-4">
                             {% if citas %}
                                 {% for cita in citas %}
-                                <div class="flex items-center p-4 bg-blue-50 rounded-xl border border-blue-100 hover:shadow-md transition">
-                                    <div class="flex-shrink-0 bg-white p-3 rounded-lg text-center min-w-[70px] border border-blue-100">
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center p-4 bg-blue-50 rounded-xl border border-blue-100 hover:shadow-md transition">
+                                    <div class="flex-shrink-0 bg-white p-3 rounded-lg text-center min-w-[70px] border border-blue-100 mb-3 sm:mb-0">
                                         <span class="block text-xs text-gray-500 uppercase font-bold">
                                             {{ cita.fecha|date:"M" }} </span>
                                         <span class="block text-2xl font-bold text-blue-600">
                                             {{ cita.fecha|date:"d" }} </span>
                                     </div>
                                     
-                                    <div class="ml-4 flex-1">
-                                        <h3 class="text-lg font-bold text-gray-900">{{ cita.servicio.titulo }}</h3>
-                                        <div class="flex items-center text-sm text-gray-500 mt-1 space-x-4">
-                                            <span class="flex items-center">🕒 {{ cita.hora|time:"H:i A" }}</span>
-                                            <span class="flex items-center">👩‍⚕️ Dra. Jazmin</span>
+                                    <div class="ml-0 sm:ml-4 flex-1 w-full">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <h3 class="text-lg font-bold text-gray-900">{{ cita.servicio.titulo }}</h3>
+                                                <div class="flex items-center text-sm text-gray-500 mt-1 space-x-4">
+                                                    <span class="flex items-center">🕒 {{ cita.hora|time:"H:i A" }}</span>
+                                                    <span class="font-medium text-blue-600">S/ {{ cita.servicio.precio_estimado }}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="text-right">
+                                                {% if cita.estado == 'pendiente' %}
+                                                    <span class="px-3 py-1 text-xs font-bold text-yellow-700 bg-yellow-100 rounded-full block mb-2 text-center">Pendiente</span>
+                                                    <a href="{% url 'pagar_cita' cita.id %}" target="_blank" class="text-xs bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg shadow-sm font-bold flex items-center justify-center transition">
+                                                        💸 Pagar Ahora
+                                                    </a>
+                                                {% elif cita.estado == 'confirmada' %}
+                                                    <span class="px-3 py-1 text-xs font-bold text-green-700 bg-green-100 rounded-full">Confirmada</span>
+                                                {% else %}
+                                                    <span class="px-3 py-1 text-xs font-bold text-gray-700 bg-gray-100 rounded-full">{{ cita.estado|title }}</span>
+                                                {% endif %}
+                                            </div>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="ml-4 hidden sm:block">
-                                        {% if cita.estado == 'CONFIRMADA' %}
-                                            <span class="px-3 py-1 text-xs font-bold text-green-700 bg-green-100 rounded-full">Confirmada</span>
-                                        {% elif cita.estado == 'PENDIENTE' %}
-                                            <span class="px-3 py-1 text-xs font-bold text-yellow-700 bg-yellow-100 rounded-full">Pendiente</span>
-                                        {% else %}
-                                            <span class="px-3 py-1 text-xs font-bold text-gray-700 bg-gray-100 rounded-full">{{ cita.estado }}</span>
-                                        {% endif %}
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -113,62 +128,35 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900">📂 Mis Documentos y Radiografías</h3>
-                    </div>
-                    <div class="p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="group relative aspect-square bg-gray-100 rounded-xl overflow-hidden cursor-pointer">
-                            <img src="https://img.freepik.com/free-photo/doctor-looking-x-ray_1112-581.jpg" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition">
-                            <div class="absolute inset-0 bg-black/40 flex items-end p-3">
-                                <span class="text-white text-xs font-bold">Panorámica 2025</span>
-                            </div>
+                <a href="{% url 'tienda' %}" class="block group">
+                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-lg p-6 text-white flex items-center justify-between relative overflow-hidden transition transform group-hover:scale-[1.02]">
+                        <div class="relative z-10">
+                            <h3 class="text-xl font-bold">🦷 Tienda Dental</h3>
+                            <p class="text-indigo-100 text-sm mt-1 max-w-sm">
+                                Encuentra cepillos, pastas y productos recomendados por la Dra. Jazmín.
+                            </p>
+                            <span class="inline-block mt-4 bg-white text-indigo-600 text-xs font-bold px-4 py-2 rounded-full shadow-md">
+                                Ver Productos
+                            </span>
                         </div>
-                        <div class="group relative aspect-square bg-gray-100 rounded-xl overflow-hidden cursor-pointer">
-                            <img src="https://img.freepik.com/free-photo/teeth-smile-young-woman_144627-9036.jpg" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition">
-                            <div class="absolute inset-0 bg-black/40 flex items-end p-3">
-                                <span class="text-white text-xs font-bold">Foto Inicial</span>
-                            </div>
-                        </div>
-                        <div class="flex flex-col items-center justify-center bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl text-gray-400">
-                            <span class="text-xs font-medium p-2 text-center">Próximamente más resultados</span>
+                        <div class="text-6xl relative z-10 opacity-90 group-hover:rotate-12 transition">
+                            🛒
                         </div>
                     </div>
-                </div>
-
-                <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl shadow-lg p-6 text-white flex items-center justify-between relative overflow-hidden group cursor-pointer">
-                    <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition duration-500"></div>
-                    <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-white opacity-20 rounded-full blur-2xl"></div>
-                    <div class="relative z-10">
-                        <h3 class="text-lg font-bold">🎁 ¡Gana una Limpieza Gratis!</h3>
-                        <p class="text-indigo-100 text-sm mt-1 max-w-sm">
-                            Recomiéndanos con un amigo. Si agenda su cita, tú recibes una profilaxis totalmente gratis.
-                        </p>
-                        <button class="mt-4 bg-white text-indigo-600 text-xs font-bold px-4 py-2 rounded-full shadow-md hover:scale-105 transition">
-                            Copiar mi código: JOSHUA-2026
-                        </button>
-                    </div>
-                    <div class="text-4xl relative z-10 animate-bounce">
-                        🎟️
-                    </div>
-                </div>
+                </a>
 
             </div> 
 
             <div class="space-y-8">
-                <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-10">
-                        <svg class="w-16 h-16 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg>
-                    </div>
-                    <h3 class="text-gray-900 font-bold mb-2">Tu Progreso (Ortodoncia)</h3>
-                    <p class="text-sm text-gray-500 mb-4">¡Vas muy bien! Ya completaste la fase de alineación.</p>
-                    <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
-                        <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-3 rounded-full" style="width: 70%"></div>
-                    </div>
-                    <div class="flex justify-between text-xs font-bold text-gray-600">
-                        <span>Inicio</span>
-                        <span class="text-blue-600">70%</span>
-                        <span>Sonrisa Perfecta</span>
+                <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                    <h3 class="text-gray-900 font-bold mb-4">📂 Mis Documentos</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                         <div class="aspect-square bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 cursor-pointer hover:bg-gray-200 transition">
+                            <span class="text-xs text-center p-2">Radiografías</span>
+                         </div>
+                         <div class="aspect-square bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 cursor-pointer hover:bg-gray-200 transition">
+                            <span class="text-xs text-center p-2">Fotos</span>
+                         </div>
                     </div>
                 </div>
 
@@ -177,28 +165,13 @@
                     <ul class="space-y-4">
                         <li class="flex justify-between text-sm">
                             <span class="text-gray-500">Última visita</span>
-                            <span class="font-medium text-gray-900">15 Ene 2026</span>
+                            <span class="font-medium text-gray-900">--/--/--</span>
                         </li>
                         <li class="flex justify-between text-sm">
-                            <span class="text-gray-500">Tratamiento actual</span>
-                            <span class="font-medium text-gray-900">Ortodoncia</span>
-                        </li>
-                        <li class="flex justify-between text-sm">
-                            <span class="text-gray-500">Seguro</span>
-                            <span class="font-medium text-gray-900">Rimac EPS</span>
+                            <span class="text-gray-500">Estado</span>
+                            <span class="font-medium text-green-600">En tratamiento</span>
                         </li>
                     </ul>
-                </div>
-
-                <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl shadow-lg p-6 text-white relative overflow-hidden group cursor-pointer hover:shadow-xl transition">
-                    <div class="relative z-10">
-                        <h3 class="font-bold text-lg">Historial de Pagos</h3>
-                        <p class="text-blue-100 text-sm mt-1">Descarga tus facturas y boletas electrónicas.</p>
-                        <button class="mt-4 bg-white text-blue-800 text-xs font-bold px-3 py-2 rounded-lg">Ver Historial</button>
-                    </div>
-                    <div class="absolute right-0 bottom-0 opacity-10 transform translate-x-4 translate-y-4">
-                        <svg class="h-32 w-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/></svg>
-                    </div>
                 </div>
             </div>
         </div>
@@ -207,17 +180,13 @@
 
 <div id="modal-cita" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity backdrop-blur-sm" onclick="toggleModal()"></div>
-
         <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
             <div class="bg-blue-600 px-4 py-3 sm:px-6">
                 <h3 class="text-lg leading-6 font-bold text-white" id="modal-title">📅 Reservar Nueva Cita</h3>
             </div>
-            
             <form method="POST" action="{% url 'crear_cita' %}" class="p-6 space-y-4">
                 {% csrf_token %}
-                
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Especialidad / Tratamiento</label>
                     <select name="servicio" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
@@ -226,7 +195,6 @@
                         {% endfor %}
                     </select>
                 </div>
-
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Fecha</label>
@@ -237,14 +205,9 @@
                         <input type="time" name="hora" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </div>
                 </div>
-
                 <div class="mt-5 sm:mt-6 flex gap-3">
-                    <button type="button" onclick="toggleModal()" class="w-1/2 inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:text-sm">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="w-1/2 inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none sm:text-sm">
-                        Confirmar Cita
-                    </button>
+                    <button type="button" onclick="toggleModal()" class="w-1/2 inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:text-sm">Cancelar</button>
+                    <button type="submit" class="w-1/2 inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none sm:text-sm">Confirmar Cita</button>
                 </div>
             </form>
         </div>

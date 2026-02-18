@@ -21,6 +21,10 @@ urlpatterns = [
     # --- RUTA TEMPORAL ---
     path('ver-email/', views.test_email_design, name='test_email'),
 
-    # --- NUEVA RUTA: DESCARGAR PDF ---
+    # --- DESCARGAR PDF ---
     path('receta/pdf/<int:receta_id>/', views.descargar_receta_pdf, name='descargar_receta'),
+
+    # --- TIENDA Y PAGOS (NUEVO) ---
+    path('tienda/', views.tienda, name='tienda'),
+    path('pagar-cita/<int:cita_id>/', views.pagar_cita, name='pagar_cita'),
 ]

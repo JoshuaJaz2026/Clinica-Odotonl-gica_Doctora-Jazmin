@@ -15,8 +15,8 @@ import xlwt
 from django.http import HttpResponse
 from datetime import datetime
 
-# IMPORTAMOS TODOS LOS MODELOS
-from .models import Servicio, Cita, Paciente, Documento, Pago, Insumo, Receta 
+# IMPORTAMOS TODOS LOS MODELOS (INCLUYENDO LOS NUEVOS)
+from .models import Servicio, Cita, Paciente, Documento, Pago, Insumo, Receta, FichaMedica, Producto
 
 # ---------------------------------------------------------------
 # 0. INLINES
@@ -31,6 +31,13 @@ class PagoInline(admin.StackedInline):
     model = Pago
     can_delete = False
     verbose_name_plural = 'Registro de Pago (Caja)'
+
+# NUEVO: Ficha Médica dentro del Paciente
+class FichaMedicaInline(admin.StackedInline):
+    model = FichaMedica
+    can_delete = False
+    verbose_name_plural = '🩺 Antecedentes Médicos (Anamnesis)'
+    fk_name = 'paciente'
 
 # ---------------------------------------------------------------
 # 1. FORMULARIOS
@@ -157,7 +164,6 @@ class RecetaAdmin(admin.ModelAdmin):
     search_fields = ('paciente__first_name', 'diagnostico', 'medicamentos')
     readonly_fields = ('fecha_emision',)
     
-    # ACCIÓN NUEVA PARA IMPRIMIR
     actions = ['imprimir_receta_pdf'] 
     
     formfield_overrides = {
@@ -197,7 +203,6 @@ class RecetaAdmin(admin.ModelAdmin):
             
             text_object = p.beginText(50, height - 220)
             text_object.setFont("Helvetica", 10)
-            # Separamos por saltos de línea para que se vea ordenado
             lines = receta.medicamentos.split('\n')
             for line in lines:
                 text_object.textLine(line)
@@ -211,7 +216,7 @@ class RecetaAdmin(admin.ModelAdmin):
             if receta.proxima_cita:
                 p.drawString(50, 35, f"Próxima cita sugerida: {receta.proxima_cita}")
             
-            p.showPage() # Fin de página
+            p.showPage()
 
         p.save()
         buffer.seek(0)
@@ -219,14 +224,31 @@ class RecetaAdmin(admin.ModelAdmin):
         response['Content-Disposition'] = f'attachment; filename="Receta_{datetime.now().strftime("%Y%m%d")}.pdf"'
         return response
 
+# ---------------------------------------------------------
+# 5. TIENDA VIRTUAL 🛒 (NUEVO)
+# ---------------------------------------------------------
+@admin.register(Producto)
+class ProductoAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'precio', 'stock', 'imagen_preview')
+    search_fields = ('nombre',)
+    
+    def imagen_preview(self, obj):
+        if obj.imagen:
+            return format_html('<img src="{}" width="50" height="50" style="border-radius:5px;" />', obj.imagen.url)
+        return "No img"
+    imagen_preview.short_description = "Vista Previa"
+
 # ---------------------------------------------------------------
-# 5. USUARIOS
+# 6. USUARIOS
 # ---------------------------------------------------------------
 @admin.register(Paciente)
 class PacienteAdmin(admin.ModelAdmin):
     form = PacienteAdminForm 
     list_display = ('username', 'first_name', 'last_name', 'email', 'es_activo')
-    inlines = [DocumentoInline]
+    
+    # AGREGAMOS FichaMedicaInline AQUÍ
+    inlines = [FichaMedicaInline, DocumentoInline]
+    
     def get_queryset(self, request):
         return super().get_queryset(request).filter(is_staff=False)
     fields = ('username', 'first_name', 'last_name', 'email', 'password', 'is_active')
